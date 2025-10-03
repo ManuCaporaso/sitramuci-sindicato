@@ -5,7 +5,7 @@ const Afiliado = sequelize.define("Afiliado", {
   nombre: { type: DataTypes.STRING(50), allowNull: false },
   apellido: { type: DataTypes.STRING(50), allowNull: false },
   dni: { 
-    type: DataTypes.BIGINT.UNSIGNED,
+    type: DataTypes.BIGINT,
     allowNull: false, 
     unique: true,
     validate: { isInt: true, min: 1 }
@@ -16,7 +16,7 @@ const Afiliado = sequelize.define("Afiliado", {
   localidad: { type: DataTypes.STRING(50), allowNull: true },
   provincia: { type: DataTypes.STRING(50), allowNull: true },
   codigo_postal: { 
-    type: DataTypes.INTEGER.UNSIGNED, 
+    type: DataTypes.INTEGER, 
     allowNull: true,
     validate: { min: 0 }
   },
@@ -27,7 +27,7 @@ const Afiliado = sequelize.define("Afiliado", {
     validate: { isEmail: true }
   },
   telefono: { 
-    type: DataTypes.BIGINT.UNSIGNED,
+    type: DataTypes.BIGINT,
     allowNull: true,
     validate: { isInt: true, min: 0 }
   },
@@ -36,7 +36,7 @@ const Afiliado = sequelize.define("Afiliado", {
   rubro: { type: DataTypes.STRING(50), allowNull: true },
   categoria: { type: DataTypes.STRING(50), allowNull: true },
   legajo: { 
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,
     validate: { isInt: true, min: 1 }
@@ -48,4 +48,5 @@ const Afiliado = sequelize.define("Afiliado", {
   timestamps: true,
   tableName: "afiliados"
 });
+
 module.exports = Afiliado;

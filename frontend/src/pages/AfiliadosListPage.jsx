@@ -3,17 +3,20 @@ import AfiliadoList from "../components/AfiliadoList";
 import AfiliadoForm from "../components/AfiliadoForm";
 import Modal from "../components/Modal";
 import "../Styles/AfiliadosListPage.css";
+import api from "../utils/axiosConfig"; // Axios con token JWT
 
 const AfiliadosListPage = () => {
   const [editable, setEditable] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
+  // Abrir modal con datos de afiliado editable
   const handleEdit = (afiliado) => {
     setEditable(afiliado);
     setShowModal(true);
   };
 
+  // Cerrar modal
   const handleCloseModal = () => {
     setEditable(null);
     setShowModal(false);
@@ -37,6 +40,7 @@ const AfiliadosListPage = () => {
           key={refresh}
           onEdit={handleEdit}
           onDeleted={() => setRefresh(!refresh)}
+          api={api} // Pasamos Axios con token JWT
         />
       </div>
 
@@ -49,6 +53,7 @@ const AfiliadosListPage = () => {
               setRefresh(!refresh);
               handleCloseModal();
             }}
+            api={api} // Pasamos Axios con token JWT
           />
         </Modal>
       )}

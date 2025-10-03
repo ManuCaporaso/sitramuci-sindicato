@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Modal from "./Modal";
 import AfiliadoForm from "./AfiliadoForm";
 import ExportPDFButton from "./ExportPDFButton";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import api from "../utils/axiosConfig"; // Instancia de Axios con token
 
 const AfiliadoList = () => {
   const [afiliados, setAfiliados] = useState([]);
@@ -16,13 +16,10 @@ const AfiliadoList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // Variable de entorno para la URL del backend
-  const API_URL = process.env.REACT_APP_API_URL;
-
   // Fetch afiliados
   const fetchAfiliados = async () => {
     try {
-      const res = await axios.get(API_URL);
+      const res = await api.get("/afiliados");
       setAfiliados(res.data);
     } catch (err) {
       toast.error("❌ Error al cargar afiliados", { icon: "⚠️" });
@@ -187,7 +184,7 @@ const AfiliadoList = () => {
                       onClick={async () => {
                         toast.dismiss();
                         try {
-                          await axios.delete(`${API_URL}/${editable.id}`);
+                          await api.delete(`/afiliados/${editable.id}`);
                           toast.success("🗑️ Afiliado eliminado correctamente!");
                           fetchAfiliados();
                           setIsModalOpen(false);

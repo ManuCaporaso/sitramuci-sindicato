@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import "../Styles/Dashboard.css";
-import axios from "axios";
+import api from "../utils/axiosConfig";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -11,21 +11,22 @@ const Dashboard = () => {
     porSector: [],
   });
 
-  // Tomar la URL de la API desde variable de entorno
-  const API_URL = process.env.REACT_APP_API_URL;
-
   useEffect(() => {
-    // Traer estadísticas de afiliados desde la API
     const fetchStats = async () => {
       try {
-        const res = await axios.get(`${API_URL}/stats`);
+        const res = await api.get("/afiliados/stats");
         setStats(res.data);
       } catch (err) {
         console.error(err);
       }
     };
     fetchStats();
-  }, [API_URL]); // Dependencia de la URL para eslint
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // eliminar token
+    navigate("/login"); // redirigir al login
+  };
 
   return (
     <div className="dashboard">
@@ -43,10 +44,20 @@ const Dashboard = () => {
             <li><Link to="/formulario-afiliados">Formulario Afiliados</Link></li>
           </ul>
         </nav>
+        {/* Botón de Cerrar Sesión */}
+        <div style={{ marginTop: "auto", padding: "1rem" }}>
+          <button
+            onClick={handleLogout}
+            className="btn-primary"
+            style={{ width: "100%" }}
+          >
+            Cerrar Sesión
+          </button>
+        </div>
       </aside>
 
       <main className="content">
-        <Outlet /> {/* Aquí se renderizan las páginas hijas */}
+        <Outlet />
 
         <div className="dashboard-home">
           <img
@@ -56,7 +67,10 @@ const Dashboard = () => {
           />
           <h1>Bienvenido a SI.TRA.MU.CI</h1>
           <p>Selecciona una opción del menú lateral para comenzar a gestionar los afiliados y reportes.</p>
-          <button onClick={() => navigate("/formulario-afiliados")} className="btn-primary">
+          <button
+            onClick={() => navigate("/formulario-afiliados")}
+            className="btn-primary"
+          >
             Agregar nuevo afiliado
           </button>
 

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import api from "../utils/axiosConfig"; // Importamos la instancia de Axios con token
 
 const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
   const [formData, setFormData] = useState({
@@ -93,10 +91,10 @@ const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
 
     try {
       if (editable) {
-        await axios.put(`${API_URL}/${editable.id}`, payload);
+        await api.put(`/afiliados/${editable.id}`, payload);
         toast.success("✅ Afiliado actualizado correctamente!", { icon: "📝" });
       } else {
-        await axios.post(API_URL, payload);
+        await api.post("/afiliados", payload);
         toast.success("🎉 Afiliado creado correctamente!", { icon: "🎯" });
       }
 

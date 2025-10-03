@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AfiliadoForm from "../components/AfiliadoForm";
-import "../Styles/AfiliadosFormPage.css"; // Asegurate de crear este archivo
+import "../Styles/AfiliadosFormPage.css"; // Asegúrate de crear este archivo
+import api from "../utils/axiosConfig"; // Importamos el axiosConfig ya creado
 
 const AfiliadosFormPage = () => {
   const [refresh, setRefresh] = useState(false);
@@ -17,6 +18,7 @@ const AfiliadosFormPage = () => {
       <h1>Nuevo Afiliado</h1>
       <div className="form-container">
         <AfiliadoForm
+          api={api} // Pasamos la instancia de Axios con token
           onSaved={() => {
             setRefresh(!refresh);
           }}

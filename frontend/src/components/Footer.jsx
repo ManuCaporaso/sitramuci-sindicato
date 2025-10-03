@@ -12,7 +12,7 @@ const Footer = () => {
             <FaEnvelope style={{ marginRight: "0.3rem" }} />
             <a href="mailto:manuelcaporaso20@gmail.com">manuelcaporaso20@gmail.com</a>
           </p>
-          <p>Tel: +54 9 11 1234 5678</p>
+          <p>Tel: +54 9 299 456 1965</p>
         </div>
 
         <div className="footer-redes">

@@ -1,46 +1,23 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const { sequelize } = require("../config/database"); // <-- desestructuramos la instancia
 
 const Afiliado = sequelize.define("Afiliado", {
   nombre: { type: DataTypes.STRING(50), allowNull: false },
   apellido: { type: DataTypes.STRING(50), allowNull: false },
-  dni: { 
-    type: DataTypes.BIGINT,
-    allowNull: false, 
-    unique: true,
-    validate: { isInt: true, min: 1 }
-  },
+  dni: { type: DataTypes.BIGINT, allowNull: false, unique: true, validate: { isInt: true, min: 1 } },
   estado_civil: { type: DataTypes.STRING(20), allowNull: true },
   fecha_nacimiento: { type: DataTypes.DATEONLY, allowNull: true },
   domicilio: { type: DataTypes.STRING(100), allowNull: true },
   localidad: { type: DataTypes.STRING(50), allowNull: true },
   provincia: { type: DataTypes.STRING(50), allowNull: true },
-  codigo_postal: { 
-    type: DataTypes.INTEGER, 
-    allowNull: true,
-    validate: { min: 0 }
-  },
-  email: { 
-    type: DataTypes.STRING(100), 
-    allowNull: true,
-    unique: true,
-    validate: { isEmail: true }
-  },
-  telefono: { 
-    type: DataTypes.BIGINT,
-    allowNull: true,
-    validate: { isInt: true, min: 0 }
-  },
+  codigo_postal: { type: DataTypes.INTEGER, allowNull: true, validate: { min: 0 } },
+  email: { type: DataTypes.STRING(100), allowNull: true, unique: true, validate: { isEmail: true } },
+  telefono: { type: DataTypes.BIGINT, allowNull: true, validate: { isInt: true, min: 0 } },
   profesion: { type: DataTypes.STRING(50), allowNull: true },
   sector: { type: DataTypes.STRING(50), allowNull: true },
   rubro: { type: DataTypes.STRING(50), allowNull: true },
   categoria: { type: DataTypes.STRING(50), allowNull: true },
-  legajo: { 
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    unique: true,
-    validate: { isInt: true, min: 1 }
-  },
+  legajo: { type: DataTypes.INTEGER, allowNull: false, unique: true, validate: { isInt: true, min: 1 } },
   domicilio_laboral: { type: DataTypes.STRING(100), allowNull: true },
   fecha_ingreso: { type: DataTypes.DATEONLY, allowNull: true },
   activo: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },

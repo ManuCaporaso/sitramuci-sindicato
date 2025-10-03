@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 4000;
 
 // Probar conexión
 sequelize.authenticate()
-  .then(() => console.log("✅ Conexión establecida con MySQL"))
+  .then(() => console.log("✅ Conexión establecida con POSTGRESQL EN ALWAYS DATA"))
   .catch(err => console.error("❌ Error de conexión:", err));
 
 // Sincronizar tablas

@@ -6,7 +6,7 @@ const {
   createAfiliado,
   updateAfiliado,
   deleteAfiliado,
-  getAfiliadosStats // Asegurate de exportar esta función en tu controller
+  getAfiliadosStats 
 } = require("../controllers/afiliadoController");
 
 // Ruta para estadísticas (antes de /:id)

@@ -11,37 +11,39 @@ const Dashboard = () => {
     porSector: [],
   });
 
+  // Tomar la URL de la API desde variable de entorno
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     // Traer estadísticas de afiliados desde la API
     const fetchStats = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/afiliados/stats");
+        const res = await axios.get(`${API_URL}/stats`);
         setStats(res.data);
       } catch (err) {
         console.error(err);
       }
     };
     fetchStats();
-  }, []);
+  }, [API_URL]); // Dependencia de la URL para eslint
 
   return (
     <div className="dashboard">
-<aside className="sidebar">
-  <Link to="/" className="sidebar-logo-link">
-    <img
-      src="/logositramuci.png"
-      alt="Logo Sindicato"
-      className="sidebar-logo"
-    />
-  </Link>
-  <nav>
-    <ul>
-      <li><Link to="/afiliados">Afiliados</Link></li>
-      <li><Link to="/formulario-afiliados">Formulario Afiliados</Link></li>
-    </ul>
-  </nav>
-</aside>
-
+      <aside className="sidebar">
+        <Link to="/" className="sidebar-logo-link">
+          <img
+            src="/logositramuci.png"
+            alt="Logo Sindicato"
+            className="sidebar-logo"
+          />
+        </Link>
+        <nav>
+          <ul>
+            <li><Link to="/afiliados">Afiliados</Link></li>
+            <li><Link to="/formulario-afiliados">Formulario Afiliados</Link></li>
+          </ul>
+        </nav>
+      </aside>
 
       <main className="content">
         <Outlet /> {/* Aquí se renderizan las páginas hijas */}

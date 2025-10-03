@@ -16,10 +16,13 @@ const AfiliadoList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
+  // Variable de entorno para la URL del backend
+  const API_URL = process.env.REACT_APP_API_URL;
+
   // Fetch afiliados
   const fetchAfiliados = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/afiliados");
+      const res = await axios.get(API_URL);
       setAfiliados(res.data);
     } catch (err) {
       toast.error("❌ Error al cargar afiliados", { icon: "⚠️" });
@@ -173,7 +176,6 @@ const AfiliadoList = () => {
             }}
           />
 
-          {/* Botón de eliminar con confirmación toast */}
           <button
             style={{ marginTop: "1rem", backgroundColor: "red", color: "white" }}
             onClick={() => {
@@ -185,7 +187,7 @@ const AfiliadoList = () => {
                       onClick={async () => {
                         toast.dismiss();
                         try {
-                          await axios.delete(`http://localhost:4000/api/afiliados/${editable.id}`);
+                          await axios.delete(`${API_URL}/${editable.id}`);
                           toast.success("🗑️ Afiliado eliminado correctamente!");
                           fetchAfiliados();
                           setIsModalOpen(false);

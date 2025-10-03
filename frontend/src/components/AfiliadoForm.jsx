@@ -3,6 +3,8 @@ import axios from "axios";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
   const [formData, setFormData] = useState({
     nombre: "",
@@ -42,7 +44,6 @@ const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    // Campos numéricos: solo números
     if (["dni", "telefono", "codigo_postal", "legajo"].includes(name)) {
       if (value === "" || /^[0-9\b]+$/.test(value)) {
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -50,64 +51,57 @@ const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
       return;
     }
 
-    // Checkbox
     if (type === "checkbox") {
       setFormData((prev) => ({ ...prev, [name]: checked }));
       return;
     }
 
-    // Campos de texto/email/fecha
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validación de email
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       toast.error("❌ Email inválido", { icon: "⚠️" });
       return;
     }
 
-    try {
-      const payload = {
-        nombre: formData.nombre || null,
-        apellido: formData.apellido || null,
-        dni: formData.dni ? parseInt(formData.dni, 10) : null,
-        estado_civil: formData.estado_civil || null,
-        fecha_nacimiento: formData.fecha_nacimiento || null,
-        domicilio: formData.domicilio || null,
-        localidad: formData.localidad || null,
-        provincia: formData.provincia || null,
-        codigo_postal: formData.codigo_postal
-          ? parseInt(formData.codigo_postal, 10)
-          : null,
-        email: formData.email || null,
-        telefono: formData.telefono ? parseInt(formData.telefono, 10) : null,
-        profesion: formData.profesion || null,
-        sector: formData.sector || null,
-        rubro: formData.rubro || null,
-        categoria: formData.categoria || null,
-        legajo: formData.legajo ? parseInt(formData.legajo, 10) : null,
-        domicilio_laboral: formData.domicilio_laboral || null,
-        fecha_ingreso: formData.fecha_ingreso || null,
-        activo: !!formData.activo,
-      };
+    const payload = {
+      nombre: formData.nombre || null,
+      apellido: formData.apellido || null,
+      dni: formData.dni ? parseInt(formData.dni, 10) : null,
+      estado_civil: formData.estado_civil || null,
+      fecha_nacimiento: formData.fecha_nacimiento || null,
+      domicilio: formData.domicilio || null,
+      localidad: formData.localidad || null,
+      provincia: formData.provincia || null,
+      codigo_postal: formData.codigo_postal
+        ? parseInt(formData.codigo_postal, 10)
+        : null,
+      email: formData.email || null,
+      telefono: formData.telefono ? parseInt(formData.telefono, 10) : null,
+      profesion: formData.profesion || null,
+      sector: formData.sector || null,
+      rubro: formData.rubro || null,
+      categoria: formData.categoria || null,
+      legajo: formData.legajo ? parseInt(formData.legajo, 10) : null,
+      domicilio_laboral: formData.domicilio_laboral || null,
+      fecha_ingreso: formData.fecha_ingreso || null,
+      activo: !!formData.activo,
+    };
 
+    try {
       if (editable) {
-        await axios.put(
-          `http://localhost:4000/api/afiliados/${editable.id}`,
-          payload
-        );
+        await axios.put(`${API_URL}/${editable.id}`, payload);
         toast.success("✅ Afiliado actualizado correctamente!", { icon: "📝" });
       } else {
-        await axios.post("http://localhost:4000/api/afiliados", payload);
+        await axios.post(API_URL, payload);
         toast.success("🎉 Afiliado creado correctamente!", { icon: "🎯" });
       }
 
       if (onSaved) onSaved();
 
-      // Resetear formulario
       setFormData({
         nombre: "",
         apellido: "",

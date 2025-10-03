@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/axiosConfig"; // <- Importamos la instancia
 import { ToastContainer, toast, Slide } from "react-toastify";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,15 +21,12 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/login", formData);
+      const res = await api.post("/auth/login", formData); // usamos la instancia
       const { token } = res.data;
 
-      // Guardar token
       localStorage.setItem("token", token);
-
       toast.success("✅ Login exitoso!", { autoClose: 2000 });
 
-      // Redirigir al dashboard
       setTimeout(() => navigate("/"), 2000);
     } catch (err) {
       console.error(err);

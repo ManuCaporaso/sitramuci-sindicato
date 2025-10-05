@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom"; // ✅ para obtener role desde Dashboard
 import Modal from "./Modal";
 import AfiliadoForm from "./AfiliadoForm";
 import ExportPDFButton from "./ExportPDFButton";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import api from "../utils/axiosConfig"; // Instancia de Axios con token
+import api from "../utils/axiosConfig";
 
 const AfiliadoList = () => {
+  const { role } = useOutletContext(); // obtenemos role
   const [afiliados, setAfiliados] = useState([]);
   const [search, setSearch] = useState("");
   const [showActivos, setShowActivos] = useState(false);
@@ -16,7 +18,6 @@ const AfiliadoList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // Fetch afiliados
   const fetchAfiliados = async () => {
     try {
       const res = await api.get("/afiliados");
@@ -46,14 +47,12 @@ const AfiliadoList = () => {
     return matchesSearch && matchesActivo;
   });
 
-  // Paginación
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const paginated = filtered.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  // Abrir modal edición
   const openEditModal = (afiliado) => {
     setEditable(afiliado);
     setIsModalOpen(true);
@@ -130,7 +129,11 @@ const AfiliadoList = () => {
               <td>{a.domicilio_laboral}</td>
               <td>{a.fecha_ingreso}</td>
               <td>
-                <button onClick={() => openEditModal(a)}>Editar</button>
+                {(role === "editor" || role === "admin") && (
+                  <>
+                    <button onClick={() => openEditModal(a)}>Editar</button>
+                  </>
+                )}
               </td>
             </tr>
           ))}
@@ -144,7 +147,6 @@ const AfiliadoList = () => {
         </tbody>
       </table>
 
-      {/* Paginación */}
       {totalPages > 1 && (
         <div style={{ marginTop: "1rem" }}>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
@@ -160,8 +162,7 @@ const AfiliadoList = () => {
         </div>
       )}
 
-      {/* Modal edición */}
-      {isModalOpen && (
+      {isModalOpen && (role === "editor" || role === "admin") && (
         <Modal onClose={() => setIsModalOpen(false)}>
           <h3>Editar Afiliado</h3>
           <AfiliadoForm

@@ -1,54 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"; // ✅ import default corregido
 import "../Styles/Dashboard.css";
-import api from "../utils/axiosConfig";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({
-    total: 0,
-    activos: 0,
-    porSector: [],
-  });
+  const [role, setRole] = useState("user");
 
+  // Leer token y rol
   useEffect(() => {
-    const fetchStats = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
       try {
-        const res = await api.get("/afiliados/stats");
-        setStats(res.data);
+        const decoded = jwtDecode(token);
+        setRole(decoded.role || "user");
       } catch (err) {
-        console.error(err);
+        console.error("Token inválido:", err);
+        navigate("/login");
       }
-    };
-    fetchStats();
-  }, []);
+    }
+  }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // eliminar token
-    navigate("/login"); // redirigir al login
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   return (
     <div className="dashboard">
+      {/* Sidebar */}
       <aside className="sidebar">
         <Link to="/" className="sidebar-logo-link">
-          <img
-            src="/logositramuci.png"
-            alt="Logo Sindicato"
-            className="sidebar-logo"
-          />
+          <img src="/logositramuci.png" alt="Logo Sindicato" className="sidebar-logo" />
         </Link>
         <nav>
           <ul>
             <li><Link to="/afiliados">Afiliados</Link></li>
-            <li><Link to="/formulario-afiliados">Formulario Afiliados</Link></li>
+            {(role === "editor" || role === "admin") && (
+              <li><Link to="/formulario-afiliados">Formulario Afiliados</Link></li>
+            )}
+            {role === "admin" && (
+              <li><Link to="/admin">Administración</Link></li>
+            )}
           </ul>
         </nav>
-        {/* Botón de Cerrar Sesión */}
         <div style={{ marginTop: "auto", padding: "1rem" }}>
-          <button
-            onClick={handleLogout}
-            className="btn-primary"
+          <button 
+            onClick={handleLogout} 
+            className="btn-primary" 
             style={{ width: "100%" }}
           >
             Cerrar Sesión
@@ -56,41 +55,10 @@ const Dashboard = () => {
         </div>
       </aside>
 
+      {/* Contenido principal */}
       <main className="content">
-        <Outlet />
-
-        <div className="dashboard-home">
-          <img
-            src="/logositramuci.png"
-            alt="Logo Sindicato"
-            className="sindicato-logo"
-          />
-          <h1>Bienvenido a SI.TRA.MU.CI</h1>
-          <p>Selecciona una opción del menú lateral para comenzar a gestionar los afiliados y reportes.</p>
-          <button
-            onClick={() => navigate("/formulario-afiliados")}
-            className="btn-primary"
-          >
-            Agregar nuevo afiliado
-          </button>
-
-          <div className="dashboard-cards">
-            <div className="card">
-              <h3>Total Afiliados</h3>
-              <p>{stats.total}</p>
-            </div>
-            <div className="card">
-              <h3>Afiliados Activos</h3>
-              <p>{stats.activos}</p>
-            </div>
-            {(stats.porSector || []).map((s, i) => (
-              <div className="card" key={i}>
-                <h3>{s.sector}</h3>
-                <p>{s.count}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Renderiza la ruta hija correspondiente y pasa el role al Outlet */}
+        <Outlet context={{ role }} />
       </main>
     </div>
   );

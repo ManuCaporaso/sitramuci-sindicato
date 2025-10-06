@@ -21,6 +21,7 @@ const Afiliado = sequelize.define("Afiliado", {
   domicilio_laboral: { type: DataTypes.STRING(100), allowNull: true },
   fecha_ingreso: { type: DataTypes.DATEONLY, allowNull: true },
   activo: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+  tipo_contrato: { type: DataTypes.STRING(50), allowNull: true },
 }, {
   timestamps: true,
   tableName: "afiliados"

@@ -13,6 +13,7 @@ const sanitizeAfiliado = (data) => {
     fecha_ingreso: data.fecha_ingreso || null,
     email: data.email || null,
     activo: data.activo === true || data.activo === 1,
+    tipo_contrato: data.tipo_contrato || null,
   };
 };
 
@@ -126,6 +127,11 @@ exports.getAfiliadosStats = async (req, res) => {
       order: [[fn("COUNT", col("id")), "DESC"]],
     });
 
+    const porTipoContrato = await Afiliado.findAll({
+      attributes: ["tipo_contrato", [fn("COUNT", col("id")), "count"]],
+      group: ["tipo_contrato"],
+    });
+
     // Formatear resultados
     const afiliadosPorSector = afiliadosPorSectorRaw.map((item) => ({
       sector: item.sector || "Sin especificar",
@@ -145,6 +151,7 @@ exports.getAfiliadosStats = async (req, res) => {
       nuevosAfiliadosMes,
       afiliadosPorSector,
       afiliadosPorCategoria,
+      porTipoContrato,
     });
   } catch (error) {
     console.error("Error al obtener estadísticas:", error);

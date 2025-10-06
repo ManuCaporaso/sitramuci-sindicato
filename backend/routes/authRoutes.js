@@ -15,13 +15,9 @@ router.post("/register", authenticate, checkAdmin, async (req, res) => {
   try {
     const { username, email, password, role = "user" } = req.body;
 
-    // Verificar si el email ya existe
     const existing = await User.findOne({ where: { email } });
-    if (existing) {
-      return res.status(400).json({ message: "Email ya registrado" });
-    }
+    if (existing) return res.status(400).json({ message: "Email ya registrado" });
 
-    // Hashear contraseña
     const hashed = await bcrypt.hash(password, 10);
     const user = await User.create({ username, email, password: hashed, role });
 
@@ -35,7 +31,7 @@ router.post("/register", authenticate, checkAdmin, async (req, res) => {
 // ============================
 // Login
 // ============================
-router.post("/login", async (req, res) => {
+router.post("/login",  async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -45,7 +41,6 @@ router.post("/login", async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ message: "Credenciales inválidas" });
 
-    // Crear token con rol incluido
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
@@ -59,22 +54,6 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error al iniciar sesión" });
-  }
-});
-
-// ============================
-// Obtener todos los usuarios (solo admin)
-// ============================
-router.get("/users", authenticate, checkAdmin, async (req, res) => {
-  try {
-    const users = await User.findAll({
-      attributes: ["id", "username", "email", "role"], // no enviamos password
-      order: [["id", "ASC"]],
-    });
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error al obtener usuarios" });
   }
 });
 

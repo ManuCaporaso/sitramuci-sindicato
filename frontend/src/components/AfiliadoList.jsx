@@ -42,6 +42,7 @@ const AfiliadoList = () => {
       (a.legajo && String(a.legajo).includes(s)) ||
       (a.telefono && String(a.telefono).includes(s)) ||
       (a.codigo_postal && String(a.codigo_postal).includes(s));
+      (a.tipo_contrato && a.tipo_contrato.toLowerCase().includes(s));
 
     const matchesActivo = showActivos ? a.activo === 1 || a.activo === true : true;
     return matchesSearch && matchesActivo;
@@ -97,6 +98,7 @@ const AfiliadoList = () => {
             <th>Código Postal</th>
             <th>Email</th>
             <th>Teléfono</th>
+            <th>Tipo de Contrato</th>
             <th>Profesión</th>
             <th>Sector</th>
             <th>Rubro</th>
@@ -122,6 +124,7 @@ const AfiliadoList = () => {
               <td>{a.codigo_postal}</td>
               <td>{a.email}</td>
               <td>{a.telefono}</td>
+              <td>{a.tipo_contrato}</td>
               <td>{a.profesion}</td>
               <td>{a.sector}</td>
               <td>{a.rubro}</td>

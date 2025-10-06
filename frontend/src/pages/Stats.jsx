@@ -106,6 +106,22 @@ const Stats = () => {
           )}
         </ul>
       </div>
+
+            {/* 🔹 Afiliados por contrato */}
+      <div className="stats-section">
+        <h3>🏢 Afiliados por Tipo de Contrato</h3>
+        <ul className="stats-list">
+          {stats.porTipoContrato && stats.porTipoContrato.length > 0 ? (
+            stats.porTipoContrato.map((item, index) => (
+              <li key={index}>
+                <strong>{item.tipo_contrato || "Sin especificar"}</strong>: {item.count}
+              </li>
+            ))
+          ) : (
+            <li>No hay datos disponibles</li>
+          )}
+        </ul>
+      </div>
     </div>
   );
 };

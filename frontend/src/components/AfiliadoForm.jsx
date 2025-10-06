@@ -87,6 +87,7 @@ const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
       domicilio_laboral: formData.domicilio_laboral || null,
       fecha_ingreso: formData.fecha_ingreso || null,
       activo: !!formData.activo,
+      tipo_contrato: formData.tipo_contrato || null,
     };
 
     try {
@@ -120,6 +121,7 @@ const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
         legajo: "",
         domicilio_laboral: "",
         fecha_ingreso: "",
+        tipo_contrato: "",
       });
     } catch (err) {
       console.error(err);
@@ -151,6 +153,7 @@ const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
         <div><label>Domicilio Laboral:</label><input type="text" name="domicilio_laboral" value={formData.domicilio_laboral} onChange={handleChange} /></div>
         <div><label>Fecha de Ingreso:</label><input type="date" name="fecha_ingreso" value={formData.fecha_ingreso} onChange={handleChange} /></div>
         <div><label>Activo:</label><input type="checkbox" name="activo" checked={formData.activo} onChange={handleChange} /></div>
+        <div><label>Tipo de Contrato:</label><input type="text" name="tipo_contrato" value={formData.tipo_contrato} onChange={handleChange} /></div>
 
         <button type="submit">{editable ? "Actualizar" : "Crear"} Afiliado</button>
       </form>

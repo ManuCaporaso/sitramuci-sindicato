@@ -29,7 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/afiliados", afiliadoRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ;
 
 /**
  * Función para verificar y crear el usuario administrador

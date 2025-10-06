@@ -1,7 +1,7 @@
 const Afiliado = require("../models/Afiliado");
 const { Op, fn, col } = require("sequelize");
 
-// Función helper para normalizar datos antes de guardar
+// 🧹 Función helper para normalizar datos antes de guardar
 const sanitizeAfiliado = (data) => {
   return {
     ...data,
@@ -16,96 +16,141 @@ const sanitizeAfiliado = (data) => {
   };
 };
 
-// Obtener todos los afiliados
+// ✅ Obtener todos los afiliados
 exports.getAfiliados = async (req, res) => {
   try {
     const afiliados = await Afiliado.findAll();
     res.json(afiliados);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al obtener afiliados", details: error.message });
+    console.error("Error al obtener afiliados:", error);
+    res.status(500).json({
+      error: "Error al obtener afiliados",
+      details: error.message,
+    });
   }
 };
 
-// Obtener un afiliado por ID
+// ✅ Obtener un afiliado por ID
 exports.getAfiliadoById = async (req, res) => {
   try {
     const afiliado = await Afiliado.findByPk(req.params.id);
-    if (!afiliado) return res.status(404).json({ error: "Afiliado no encontrado" });
+    if (!afiliado)
+      return res.status(404).json({ error: "Afiliado no encontrado" });
     res.json(afiliado);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al obtener afiliado", details: error.message });
+    console.error("Error al obtener afiliado:", error);
+    res.status(500).json({
+      error: "Error al obtener afiliado",
+      details: error.message,
+    });
   }
 };
 
-// Crear un afiliado
+// ✅ Crear un afiliado
 exports.createAfiliado = async (req, res) => {
   try {
     const payload = sanitizeAfiliado(req.body);
     const nuevoAfiliado = await Afiliado.create(payload);
     res.status(201).json(nuevoAfiliado);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al crear afiliado", details: error.message });
+    console.error("Error al crear afiliado:", error);
+    res.status(500).json({
+      error: "Error al crear afiliado",
+      details: error.message,
+    });
   }
 };
 
-// Actualizar un afiliado
+// ✅ Actualizar un afiliado
 exports.updateAfiliado = async (req, res) => {
   try {
     const afiliado = await Afiliado.findByPk(req.params.id);
-    if (!afiliado) return res.status(404).json({ error: "Afiliado no encontrado" });
+    if (!afiliado)
+      return res.status(404).json({ error: "Afiliado no encontrado" });
 
     const payload = sanitizeAfiliado(req.body);
     await afiliado.update(payload);
     res.json(afiliado);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al actualizar afiliado", details: error.message });
+    console.error("Error al actualizar afiliado:", error);
+    res.status(500).json({
+      error: "Error al actualizar afiliado",
+      details: error.message,
+    });
   }
 };
 
-// Eliminar un afiliado
+// ✅ Eliminar un afiliado
 exports.deleteAfiliado = async (req, res) => {
   try {
     const afiliado = await Afiliado.findByPk(req.params.id);
-    if (!afiliado) return res.status(404).json({ error: "Afiliado no encontrado" });
+    if (!afiliado)
+      return res.status(404).json({ error: "Afiliado no encontrado" });
 
     await afiliado.destroy();
-    res.json({ message: "Afiliado eliminado" });
+    res.json({ message: "Afiliado eliminado correctamente" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al eliminar afiliado", details: error.message });
+    console.error("Error al eliminar afiliado:", error);
+    res.status(500).json({
+      error: "Error al eliminar afiliado",
+      details: error.message,
+    });
   }
 };
 
-// Obtener estadísticas de afiliados
+// ✅ Obtener estadísticas completas de afiliados
 exports.getAfiliadosStats = async (req, res) => {
   try {
-    const total = await Afiliado.count();
-    const activos = await Afiliado.count({ where: { activo: true } });
-    const inactivos = await Afiliado.count({ where: { activo: false } });
+    // Totales
+    const totalAfiliados = await Afiliado.count();
+    const afiliadosActivos = await Afiliado.count({ where: { activo: true } });
+    const afiliadosInactivos = await Afiliado.count({ where: { activo: false } });
 
-    const porSector = await Afiliado.findAll({
-      attributes: ["sector", [fn("COUNT", col("id")), "count"]],
+    // Nuevos del mes actual
+    const inicioMes = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const nuevosAfiliadosMes = await Afiliado.count({
+      where: { createdAt: { [Op.gte]: inicioMes } },
+    });
+
+    // Agrupación por sector
+    const afiliadosPorSectorRaw = await Afiliado.findAll({
+      attributes: ["sector", [fn("COUNT", col("id")), "cantidad"]],
       group: ["sector"],
+      order: [[fn("COUNT", col("id")), "DESC"]],
     });
 
-    const porCategoria = await Afiliado.findAll({
-      attributes: ["categoria", [fn("COUNT", col("id")), "count"]],
+    // Agrupación por categoría
+    const afiliadosPorCategoriaRaw = await Afiliado.findAll({
+      attributes: ["categoria", [fn("COUNT", col("id")), "cantidad"]],
       group: ["categoria"],
+      order: [[fn("COUNT", col("id")), "DESC"]],
     });
 
-    res.json({
-      total,
-      activos,
-      inactivos,
-      porSector,
-      porCategoria,
+    // Formatear resultados
+    const afiliadosPorSector = afiliadosPorSectorRaw.map((item) => ({
+      sector: item.sector || "Sin especificar",
+      cantidad: item.dataValues.cantidad,
+    }));
+
+    const afiliadosPorCategoria = afiliadosPorCategoriaRaw.map((item) => ({
+      categoria: item.categoria || "Sin especificar",
+      cantidad: item.dataValues.cantidad,
+    }));
+
+    // Enviar todo junto
+    res.status(200).json({
+      totalAfiliados,
+      afiliadosActivos,
+      afiliadosInactivos,
+      nuevosAfiliadosMes,
+      afiliadosPorSector,
+      afiliadosPorCategoria,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al obtener estadísticas", details: error.message });
+    console.error("Error al obtener estadísticas:", error);
+    res.status(500).json({
+      error: "Error al obtener estadísticas",
+      details: error.message,
+    });
   }
 };

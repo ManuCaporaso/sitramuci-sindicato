@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom"; // ✅ para obtener role desde Dashboard
+import { useOutletContext } from "react-router-dom";
 import Modal from "./Modal";
 import AfiliadoForm from "./AfiliadoForm";
 import ExportPDFButton from "./ExportPDFButton";
@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import api from "../utils/axiosConfig";
 
 const AfiliadoList = () => {
-  const { role } = useOutletContext(); // obtenemos role
+  const { role } = useOutletContext();
   const [afiliados, setAfiliados] = useState([]);
   const [search, setSearch] = useState("");
   const [showActivos, setShowActivos] = useState(false);
@@ -17,6 +17,10 @@ const AfiliadoList = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+
+  // 👉 estados para ordenamiento
+  const [sortField, setSortField] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const fetchAfiliados = async () => {
     try {
@@ -32,6 +36,24 @@ const AfiliadoList = () => {
     fetchAfiliados();
   }, []);
 
+  // 👉 función para ordenar por columna
+  const handleSort = (field) => {
+    const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
+    setSortField(field);
+    setSortOrder(order);
+
+    const sorted = [...afiliados].sort((a, b) => {
+      const aValue = a[field] ? a[field].toString().toLowerCase() : "";
+      const bValue = b[field] ? b[field].toString().toLowerCase() : "";
+
+      if (aValue < bValue) return order === "asc" ? -1 : 1;
+      if (aValue > bValue) return order === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    setAfiliados(sorted);
+  };
+
   const filtered = afiliados.filter((a) => {
     const s = search.trim().toLowerCase();
     const matchesSearch =
@@ -41,7 +63,7 @@ const AfiliadoList = () => {
       (a.dni && String(a.dni).includes(s)) ||
       (a.legajo && String(a.legajo).includes(s)) ||
       (a.telefono && String(a.telefono).includes(s)) ||
-      (a.codigo_postal && String(a.codigo_postal).includes(s));
+      (a.codigo_postal && String(a.codigo_postal).includes(s)) ||
       (a.tipo_contrato && a.tipo_contrato.toLowerCase().includes(s));
 
     const matchesActivo = showActivos ? a.activo === 1 || a.activo === true : true;
@@ -85,7 +107,12 @@ const AfiliadoList = () => {
       <table border="1" cellPadding="5" style={{ width: "100%", marginTop: "1rem" }}>
         <thead>
           <tr>
-            <th>Legajo</th>
+            <th
+              style={{ cursor: "pointer" }}
+              onClick={() => handleSort("legajo")}
+            >
+              Legajo {sortField === "legajo" && (sortOrder === "asc" ? "▲" : "▼")}
+            </th>
             <th>Nombre</th>
             <th>Apellido</th>
             <th>DNI</th>

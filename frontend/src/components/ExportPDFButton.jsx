@@ -5,8 +5,9 @@ import Modal from "../components/ModalExportPdf"; // tu componente Modal
 
 const ExportPDFButton = ({ data = [] }) => {
   const columns = [
-    { key: "nombre", label: "Nombre" },
+    { key: "legajo", label: "Legajo" },
     { key: "apellido", label: "Apellido" },
+    { key: "nombre", label: "Nombre" },
     { key: "dni", label: "DNI" },
     { key: "estado_civil", label: "Estado Civil" },
     { key: "fecha_nacimiento", label: "Fecha Nacimiento" },
@@ -21,7 +22,6 @@ const ExportPDFButton = ({ data = [] }) => {
     { key: "rubro", label: "Rubro" },
     { key: "categoria", label: "Categoría" },
     { key: "activo", label: "Activo" },
-    { key: "legajo", label: "Legajo" },
     { key: "domicilio_laboral", label: "Domicilio Laboral" },
     { key: "fecha_ingreso", label: "Fecha Ingreso" },
   ];
@@ -63,9 +63,9 @@ const ExportPDFButton = ({ data = [] }) => {
     autoTable(doc, {
       head,
       body,
-      styles: { fontSize: 8 },
+      styles: { fontSize: 10 },
       headStyles: { fillColor: [41, 128, 185], textColor: 255 },
-      startY: 40, // dejar espacio para logo y título
+      startY: 35, // dejar espacio para logo y título
       theme: "grid",
     });
 

@@ -46,12 +46,12 @@ const Stats = () => {
     fetchStats();
   }, []);
 
-  if (error) return <p className="stats-error">❌ Error: {error}</p>;
+  if (error) return <p className="stats-error"> Error: {error}</p>;
   if (!stats) return <p className="stats-loading">Cargando estadísticas...</p>;
 
   return (
     <div className="stats-container">
-      <h2>📊 Estadísticas Generales</h2>
+      <h2> Estadísticas Generales</h2>
 
       <div className="stats-grid">
         <div className="stat-card total">
@@ -75,9 +75,9 @@ const Stats = () => {
         </div>
       </div>
 
-      {/* 🔹 Afiliados por sector */}
+      {/*  Afiliados por sector */}
       <div className="stats-section">
-        <h3>🏢 Afiliados por Sector</h3>
+        <h3> Afiliados por Sector</h3>
         <ul className="stats-list">
           {stats.afiliadosPorSector && stats.afiliadosPorSector.length > 0 ? (
             stats.afiliadosPorSector.map((item, index) => (
@@ -91,9 +91,9 @@ const Stats = () => {
         </ul>
       </div>
 
-      {/* 🔹 Afiliados por categoría */}
+      {/*  Afiliados por categoría */}
       <div className="stats-section">
-        <h3>⚙️ Afiliados por Categoría</h3>
+        <h3> Afiliados por Categoría</h3>
         <ul className="stats-list">
           {stats.afiliadosPorCategoria && stats.afiliadosPorCategoria.length > 0 ? (
             stats.afiliadosPorCategoria.map((item, index) => (
@@ -107,9 +107,9 @@ const Stats = () => {
         </ul>
       </div>
 
-            {/* 🔹 Afiliados por contrato */}
+            {/*  Afiliados por contrato */}
       <div className="stats-section">
-        <h3>🏢 Afiliados por Tipo de Contrato</h3>
+        <h3> Afiliados por Tipo de Contrato</h3>
         <ul className="stats-list">
           {stats.porTipoContrato && stats.porTipoContrato.length > 0 ? (
             stats.porTipoContrato.map((item, index) => (

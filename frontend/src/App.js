@@ -8,7 +8,7 @@ import Footer from "./components/Footer.jsx";
 import Login from "./pages/login/Login.jsx";
 
 // =============================
-// 🔒 Componente para proteger rutas
+//  Componente para proteger rutas
 // =============================
 const PrivateRoute = ({ children, rolesAllowed = [] }) => {
   const token = localStorage.getItem("token");
@@ -29,7 +29,7 @@ const PrivateRoute = ({ children, rolesAllowed = [] }) => {
 };
 
 // =============================
-// 🧭 Rutas principales
+//  Rutas principales
 // =============================
 function App() {
   return (

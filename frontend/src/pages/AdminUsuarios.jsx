@@ -32,10 +32,10 @@ const AdminUsuarios = () => {
       await api.post("/auth/register", formData);
       setFormData({ username: "", email: "", password: "", role: "user" });
       fetchUsers();
-      alert("Usuario creado correctamente ✅");
+      alert("Usuario creado correctamente ");
     } catch (err) {
       console.error(err);
-      alert("Error al crear usuario ❌");
+      alert("Error al crear usuario ");
     }
   };
 

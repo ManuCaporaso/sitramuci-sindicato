@@ -61,7 +61,7 @@ const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
     e.preventDefault();
 
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      toast.error("❌ Email inválido", { icon: "⚠️" });
+      toast.error(" Email inválido", { icon: "⚠️" });
       return;
     }
 
@@ -93,10 +93,10 @@ const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
     try {
       if (editable) {
         await api.put(`/afiliados/${editable.id}`, payload);
-        toast.success("✅ Afiliado actualizado correctamente!", { icon: "📝" });
+        toast.success(" Afiliado actualizado correctamente!", { icon: "📝" });
       } else {
         await api.post("/afiliados", payload);
-        toast.success("🎉 Afiliado creado correctamente!", { icon: "🎯" });
+        toast.success(" Afiliado creado correctamente!", { icon: "🎯" });
       }
 
       if (onSaved) onSaved();
@@ -126,7 +126,7 @@ const AfiliadoForm = ({ editable = null, onSaved, onClose }) => {
     } catch (err) {
       console.error(err);
       const msg =
-        err.response?.data?.message || "❌ Error al guardar el afiliado";
+        err.response?.data?.message || " Error al guardar el afiliado";
       toast.error(msg, { icon: "⚠️" });
     }
   };

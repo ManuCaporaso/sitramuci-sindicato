@@ -18,7 +18,7 @@ const AfiliadoList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // 👉 estados para ordenamiento
+  //  estados para ordenamiento
   const [sortField, setSortField] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
@@ -27,7 +27,7 @@ const AfiliadoList = () => {
       const res = await api.get("/afiliados");
       setAfiliados(res.data);
     } catch (err) {
-      toast.error("❌ Error al cargar afiliados", { icon: "⚠️" });
+      toast.error(" Error al cargar afiliados", { icon: "⚠️" });
       console.error(err);
     }
   };
@@ -36,7 +36,7 @@ const AfiliadoList = () => {
     fetchAfiliados();
   }, []);
 
-  // 👉 función para ordenar por columna
+  //  función para ordenar por columna
   const handleSort = (field) => {
     const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
     setSortField(field);
@@ -200,7 +200,7 @@ const AfiliadoList = () => {
             onSaved={() => {
               setIsModalOpen(false);
               fetchAfiliados();
-              toast.success("✅ Cambios guardados correctamente!", { icon: "📝" });
+              toast.success(" Cambios guardados correctamente!", { icon: "📝" });
             }}
           />
 
@@ -216,12 +216,12 @@ const AfiliadoList = () => {
                         toast.dismiss();
                         try {
                           await api.delete(`/afiliados/${editable.id}`);
-                          toast.success("🗑️ Afiliado eliminado correctamente!");
+                          toast.success(" Afiliado eliminado correctamente!");
                           fetchAfiliados();
                           setIsModalOpen(false);
                         } catch (err) {
                           toast.error(
-                            err.response?.data?.message || "❌ Error al eliminar afiliado",
+                            err.response?.data?.message || " Error al eliminar afiliado",
                             { icon: "⚠️" }
                           );
                         }

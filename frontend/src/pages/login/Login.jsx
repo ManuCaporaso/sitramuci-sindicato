@@ -25,7 +25,7 @@ const Login = () => {
       const { token } = res.data;
 
       localStorage.setItem("token", token);
-      toast.success("✅ Login exitoso!", { autoClose: 2000 });
+      toast.success(" Login exitoso!", { autoClose: 2000 });
 
       setTimeout(() => navigate("/"), 2000);
     } catch (err) {

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import Stats from "../pages/Stats"; // 👈 import del componente de estadísticas
+import Stats from "../pages/Stats"; 
 import "../Styles/Dashboard.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // 👈 para saber en qué ruta estamos
+  const location = useLocation(); 
   const [role, setRole] = useState("user");
 
   // Leer token y rol
@@ -73,7 +73,7 @@ const Dashboard = () => {
       <main className="content">
         <Outlet context={{ role }} />
 
-        {/* 👇 Si está en la raíz, mostrar estadísticas */}
+        {/* Si está en la raíz, mostrar estadísticas */}
         {location.pathname === "/" && <Stats />}
       </main>
     </div>

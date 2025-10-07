@@ -1,4 +1,3 @@
-// src/components/Modal.jsx
 import React from "react";
 import "../Styles/ModalExportPdf.css"; // opcional para estilos
 

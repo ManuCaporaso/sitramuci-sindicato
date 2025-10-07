@@ -1,7 +1,7 @@
 const Afiliado = require("../models/Afiliado");
 const { Op, fn, col } = require("sequelize");
 
-// 🧹 Función helper para normalizar datos antes de guardar
+//  Función helper para normalizar datos antes de guardar
 const sanitizeAfiliado = (data) => {
   return {
     ...data,
@@ -17,7 +17,7 @@ const sanitizeAfiliado = (data) => {
   };
 };
 
-// ✅ Obtener todos los afiliados
+//  Obtener todos los afiliados
 exports.getAfiliados = async (req, res) => {
   try {
     const afiliados = await Afiliado.findAll();
@@ -31,7 +31,7 @@ exports.getAfiliados = async (req, res) => {
   }
 };
 
-// ✅ Obtener un afiliado por ID
+//  Obtener un afiliado por ID
 exports.getAfiliadoById = async (req, res) => {
   try {
     const afiliado = await Afiliado.findByPk(req.params.id);
@@ -47,7 +47,7 @@ exports.getAfiliadoById = async (req, res) => {
   }
 };
 
-// ✅ Crear un afiliado
+//  Crear un afiliado
 exports.createAfiliado = async (req, res) => {
   try {
     const payload = sanitizeAfiliado(req.body);
@@ -62,7 +62,7 @@ exports.createAfiliado = async (req, res) => {
   }
 };
 
-// ✅ Actualizar un afiliado
+//  Actualizar un afiliado
 exports.updateAfiliado = async (req, res) => {
   try {
     const afiliado = await Afiliado.findByPk(req.params.id);
@@ -81,7 +81,7 @@ exports.updateAfiliado = async (req, res) => {
   }
 };
 
-// ✅ Eliminar un afiliado
+//  Eliminar un afiliado
 exports.deleteAfiliado = async (req, res) => {
   try {
     const afiliado = await Afiliado.findByPk(req.params.id);
@@ -99,7 +99,7 @@ exports.deleteAfiliado = async (req, res) => {
   }
 };
 
-// ✅ Obtener estadísticas completas de afiliados
+//  Obtener estadísticas completas de afiliados
 exports.getAfiliadosStats = async (req, res) => {
   try {
     // Totales

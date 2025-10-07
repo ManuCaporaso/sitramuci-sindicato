@@ -1,12 +1,10 @@
-// server.js
-
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-// ⬇️ Importa el modelo User y bcryptjs
-const User = require("./models/User"); // Asume que tu modelo User está aquí
+
+const User = require("./models/User"); 
 const bcrypt = require("bcryptjs");
-// ⬆️
+
 const { sequelize, connectDB } = require("./config/database");
 const afiliadoRoutes = require("./routes/afiliadoRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -40,19 +38,19 @@ async function createAdminUser() {
       where: { email: ADMIN_EMAIL },
       defaults: {
         username: ADMIN_USERNAME,
-        // ✅ Hashing la contraseña antes de guardarla
+        //  Hashing la contraseña antes de guardarla
         password: await bcrypt.hash(ADMIN_PASSWORD_RAW, 10),
         role: "admin",
       },
     });
 
     if (created) {
-      console.log(`✅ Usuario Administrador '${ADMIN_USERNAME}' creado exitosamente.`);
+      console.log(` Usuario Administrador '${ADMIN_USERNAME}' creado exitosamente.`);
     } else {
-      console.log(`ℹ️ El Usuario Administrador '${ADMIN_USERNAME}' ya existe. Saltando la creación.`);
+      console.log(` El Usuario Administrador '${ADMIN_USERNAME}' ya existe. Saltando la creación.`);
     }
   } catch (error) {
-    console.error("❌ ERROR al crear usuario administrador:", error.message);
+    console.error(" ERROR al crear usuario administrador:", error.message);
     // Si la creación falla (ej: error de validación), el servidor puede continuar, pero es bueno registrarlo.
   }
 }
@@ -66,10 +64,10 @@ connectDB()
   // 3. Iniciar el servidor
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+      console.log(` Servidor corriendo en http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
-    console.error("❌ Error FATAL al iniciar servidor:", err.message);
+    console.error(" Error FATAL al iniciar servidor:", err.message);
     process.exit(1); // Detiene el proceso si la DB no se sincroniza
   });
